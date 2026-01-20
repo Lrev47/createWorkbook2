@@ -42,6 +42,7 @@ Public Sub Main()
     ws.Columns("B").ColumnWidth = 34
     ws.Columns("C:D").ColumnWidth = 15
     ws.Columns("E:F").ColumnWidth = 11
+    ws.Columns("H").ColumnWidth = 20
 
     ' Header title - styled to match our existing Excel templates
     With ws.Range("B2:D2")

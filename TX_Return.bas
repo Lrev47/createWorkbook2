@@ -316,32 +316,44 @@ Public Function GetCustomerName() As String
 End Function
 
 Public Sub MapToWorkbook(wb As Workbook)
-    ' Copy form values to the Return template - simpler than New Usage
+    ' Copy form values to the Return template
     Dim srcWs As Worksheet
-    Dim destWs As Worksheet
+    Dim destOverview As Worksheet
+    Dim destReturn As Worksheet
 
     Set srcWs = ThisWorkbook.Worksheets("Sheet1")
-    Set destWs = wb.Worksheets("Overview")
+    Set destOverview = wb.Worksheets("Overview")
+    Set destReturn = wb.Worksheets("Return")
 
     Debug.Print "[TX_Return] MapToWorkbook: Starting field mapping..."
-    Debug.Print "[TX_Return] MapToWorkbook: Customer # -> C4 = " & srcWs.Range("I7").Value
 
-    ' Map customer info and contacts to template
-    destWs.Range("C4").Value = srcWs.Range("I7").Value    ' Customer # (from Info box)
-    destWs.Range("C12").Value = srcWs.Range("C7").Value   ' On Site Contact
-    destWs.Range("C13").Value = srcWs.Range("C8").Value   ' Phone
-    destWs.Range("C14").Value = srcWs.Range("C9").Value   ' Email
+    ' =========================================================================
+    ' OVERVIEW SHEET MAPPINGS
+    ' =========================================================================
+    destOverview.Range("C11").Value = srcWs.Range("C10").Value   ' Sales Rep
+    destOverview.Range("C12").Value = srcWs.Range("C7").Value    ' On Site Contact
+    destOverview.Range("C13").Value = srcWs.Range("C8").Value    ' Phone
+    destOverview.Range("C14").Value = srcWs.Range("C9").Value    ' Email
 
-    ' Embed V Simple link on header - click through to deal without searching
+    Debug.Print "[TX_Return] MapToWorkbook: Overview mappings complete"
+
+    ' =========================================================================
+    ' RETURN SHEET MAPPINGS - Dealer IDs (values only, not formulas)
+    ' =========================================================================
+    destReturn.Range("D13:D313").Value = srcWs.Range("C12:C312").Value
+
+    Debug.Print "[TX_Return] MapToWorkbook: Return sheet Dealer IDs mapped (values only)"
+
+    ' Embed V Simple link on header
     Dim vSimpleUrl As String
     vSimpleUrl = Trim(srcWs.Range("C6").Value)
 
     If Len(vSimpleUrl) > 0 Then
-        Call AddHyperlinkPreserveStyle(destWs, "B2", vSimpleUrl)
+        Call AddHyperlinkPreserveStyle(destOverview, "B2", vSimpleUrl)
         Debug.Print "[TX_Return] MapToWorkbook: V Simple hyperlink added to B2"
     End If
 
-    Debug.Print "[TX_Return] MapToWorkbook: Complete - 5 fields mapped"
+    Debug.Print "[TX_Return] MapToWorkbook: Complete"
 End Sub
 
 ' ============================================================================
