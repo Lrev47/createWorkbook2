@@ -140,6 +140,14 @@ Public Sub Build()
     Next r
 
     ' Dropdowns prevent typos and ensure data consistency
+
+    ' Customer # dropdown - prevents typos and ensures exact match with CustomerDB
+    With ws.Range("C7")
+        .Validation.Delete
+        .Validation.Add Type:=xlValidateList, Formula1:="=CustomerDB!A:A"
+        .Validation.InCellDropdown = True
+    End With
+
     With ws.Range("C11")
         .Validation.Delete
         .Validation.Add Type:=xlValidateList, Formula1:="Yes,No"
