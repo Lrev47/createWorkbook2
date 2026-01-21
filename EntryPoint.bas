@@ -364,6 +364,7 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
 
             ' Quantity only shows for single-model returns, hidden for "Various"
             ws.Range("I12").Formula = "=IFERROR(IF(OR(I11=""Various Power"",I11=""Various Equipment"",R12=""""),"""",COUNTIF(R12:R311,R12)),"""")"
+            ws.Range("I12").NumberFormat = """(""0"")"""
 
         Case "Swap"
             ' Swap workflow: Dealer ID -> CRDB lookup -> customer info
@@ -386,6 +387,7 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
 
             ' Count all entered Dealer IDs for the quantity
             ws.Range("I13").Formula = "=IFERROR(IF(B13="""","""",COUNTA(B13:B312)),"""")"
+            ws.Range("I13").NumberFormat = """(""0"")"""
 
         Case Else
             ' New Usage: direct entry of Customer # in C7 triggers lookups
@@ -399,8 +401,9 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
             ws.Range("I9").Formula = "=IFERROR(IF(C6<>"""",MID(C6,FIND(""*"",SUBSTITUTE(C6,""/"",""*"",LEN(C6)-LEN(SUBSTITUTE(C6,""/"",""""))))+1,100),""""),"""")"
             ' Model comes from PODB based on Truck PO number
             ws.Range("I10").Formula = "=IFERROR(IF(C18="""","""",INDEX(PODB!D:D,MATCH(C18,PODB!I:I,0))),"""")"
-            ' Quantity in parens - matches our naming convention
-            ws.Range("I11").Formula = "=IFERROR(IF(C18="""","""",""(""&COUNTIFS(PODB!I:I,C18,PODB!D:D,I10)&"")""),"""")"
+            ' Quantity - NumberFormat wraps in parens for display
+            ws.Range("I11").Formula = "=IFERROR(IF(C18="""","""",COUNTIFS(PODB!I:I,C18,PODB!D:D,I10)),"""")"
+            ws.Range("I11").NumberFormat = """(""0"")"""
     End Select
 End Sub
 

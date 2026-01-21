@@ -279,7 +279,7 @@ Public Function GetFileName() As String
             ' Trucks get quantity + model format
             If qty = 0 Then qty = 1
             If model = "" Then model = "Equipment"
-            transactionType = CStr(qty) & " " & model
+            transactionType = "(" & CStr(qty) & ")" & " " & model
     End Select
 
     Debug.Print "[TX_Swap] GetFileName: transactionType=" & transactionType

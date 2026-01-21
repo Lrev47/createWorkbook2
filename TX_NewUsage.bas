@@ -307,7 +307,7 @@ Public Function GetFileName() As String
     ' SafeCellValue handles #N/A etc. gracefully - prevents runtime errors
     customerName = PathHelper.SanitizeName(PathHelper.SafeCellValue(ws.Range("I6")))
     city = PathHelper.SanitizeName(PathHelper.SafeCellValue(ws.Range("I7")))
-    quantity = PathHelper.SanitizeName(PathHelper.SafeCellValue(ws.Range("I11")))
+    quantity = "(" & PathHelper.SanitizeName(PathHelper.SafeCellValue(ws.Range("I11"))) & ")"
     model = PathHelper.SanitizeName(PathHelper.SafeCellValue(ws.Range("I10")))
     oppNumber = PathHelper.SanitizeName(PathHelper.SafeCellValue(ws.Range("C14")))
     vSimpleId = PathHelper.ExtractVSimpleId(PathHelper.SafeCellValue(ws.Range("C6")))
