@@ -144,7 +144,7 @@ Public Sub Build()
     ' Customer # dropdown - prevents typos and ensures exact match with CustomerDB
     With ws.Range("C7")
         .Validation.Delete
-        .Validation.Add Type:=xlValidateList, Formula1:="=CustomerDB!A:A"
+        .Validation.Add Type:=xlValidateList, Formula1:="=CustomerDB!$A$2:$A$3000"
         .Validation.InCellDropdown = True
     End With
 
