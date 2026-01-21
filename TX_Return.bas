@@ -119,6 +119,9 @@ Public Sub Build()
         .ShowError = True
     End With
 
+    ' Format as short date for display
+    ws.Range("E12:E312").NumberFormat = "m/d/yyyy"
+
     ' =========================================================================
     ' INDEX/MATCH FORMULAS - Auto-populate from CRDB based on Serial Number
     ' =========================================================================
@@ -341,7 +344,7 @@ Public Sub MapToWorkbook(wb As Workbook)
     ' RETURN SHEET MAPPINGS - Values only, not formulas
     ' =========================================================================
     destReturn.Range("D13:D313").Value = srcWs.Range("C12:C312").Value   ' Dealer ID
-    destReturn.Range("W13:W313").Value = srcWs.Range("F12:F312").Value   ' Return Date
+    destReturn.Range("W13:W313").Value = srcWs.Range("E12:E312").Value   ' Return Date
 
     Debug.Print "[TX_Return] MapToWorkbook: Return sheet data mapped (values only)"
 

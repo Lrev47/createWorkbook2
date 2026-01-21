@@ -349,7 +349,7 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
         Case "Return"
             ' Return workflow: serial number -> CRDB lookup -> customer info
             ' Customer # derived from CRDB via Serial Number
-            ws.Range("I7").Formula = "=IFERROR(IF(B12="""","""",INDEX(CRDB!C:C,MATCH(B12,CRDB!X:X,0))),"""")"
+            ws.Range("I7").Formula = "=IF(B12="""","""",IF(IFERROR(INDEX(CRDB!C:C,MATCH(B12,CRDB!X:X,0)),"""")="""",IFERROR(INDEX(CRDB!C:C,MATCH(TRIM(B12),CRDB!X:X,0)),""""),IFERROR(INDEX(CRDB!C:C,MATCH(B12,CRDB!X:X,0)),"""")))"
 
             ' Chain lookup: Customer # -> CustomerDB -> Name/City/State
             ws.Range("I6").Formula = "=IFERROR(IF(I7="""","""",INDEX(CustomerDB!M:M,MATCH(I7,CustomerDB!A:A,0))),"""")"
@@ -369,7 +369,7 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
         Case "Swap"
             ' Swap workflow: Dealer ID -> CRDB lookup -> customer info
             ' Dealer ID is the key field for Swap transactions
-            ws.Range("I7").Formula = "=IFERROR(IF(B13="""","""",INDEX(CRDB!C:C,MATCH(B13,CRDB!W:W,0))),"""")"
+            ws.Range("I7").Formula = "=IF(B13="""","""",IF(IFERROR(INDEX(CRDB!C:C,MATCH(B13,CRDB!W:W,0)),"""")="""",IFERROR(INDEX(CRDB!C:C,MATCH(TRIM(B13),CRDB!W:W,0)),""""),IFERROR(INDEX(CRDB!C:C,MATCH(B13,CRDB!W:W,0)),"""")))"
 
             ' Chain lookup for customer details
             ws.Range("I6").Formula = "=IFERROR(IF(I7="""","""",INDEX(CustomerDB!M:M,MATCH(I7,CustomerDB!A:A,0))),"""")"
@@ -380,10 +380,10 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
             ws.Range("I10").Formula = "=IFERROR(IF(C6<>"""",MID(C6,FIND(""*"",SUBSTITUTE(C6,""/"",""*"",LEN(C6)-LEN(SUBSTITUTE(C6,""/"",""""))))+1,100),""""),"""")"
 
             ' Equipment Type drives the filename format (BATT=Power Swap, CHGR=Charger Swap)
-            ws.Range("I11").Formula = "=IFERROR(IF(B13="""","""",INDEX(CRDB!S:S,MATCH(B13,CRDB!W:W,0))),"""")"
+            ws.Range("I11").Formula = "=IF(B13="""","""",IF(IFERROR(INDEX(CRDB!S:S,MATCH(B13,CRDB!W:W,0)),"""")="""",IFERROR(INDEX(CRDB!S:S,MATCH(TRIM(B13),CRDB!W:W,0)),""""),IFERROR(INDEX(CRDB!S:S,MATCH(B13,CRDB!W:W,0)),"""")))"
 
             ' Model lookup - only shown for non-battery/charger equipment
-            ws.Range("I12").Formula = "=IFERROR(IF(B13="""","""",INDEX(CRDB!T:T,MATCH(B13,CRDB!W:W,0))),"""")"
+            ws.Range("I12").Formula = "=IF(B13="""","""",IF(IFERROR(INDEX(CRDB!T:T,MATCH(B13,CRDB!W:W,0)),"""")="""",IFERROR(INDEX(CRDB!T:T,MATCH(TRIM(B13),CRDB!W:W,0)),""""),IFERROR(INDEX(CRDB!T:T,MATCH(B13,CRDB!W:W,0)),"""")))"
 
             ' Count all entered Dealer IDs for the quantity
             ws.Range("I13").Formula = "=IFERROR(IF(B13="""","""",COUNTA(B13:B312)),"""")"
@@ -393,16 +393,16 @@ Public Sub BuildInfoBox(Optional orderType As String = "")
             ' New Usage: direct entry of Customer # in C7 triggers lookups
             If Not dbSheet Is Nothing Then
                 ' CustomerDB lookups: A=Customer#, M=Name, E=City, F=State
-                ws.Range("I6").Formula = "=IFERROR(IF(C7="""","""",INDEX(CustomerDB!M:M,MATCH(C7,CustomerDB!A:A,0))),"""")"
-                ws.Range("I7").Formula = "=IFERROR(IF(C7="""","""",INDEX(CustomerDB!E:E,MATCH(C7,CustomerDB!A:A,0))),"""")"
-                ws.Range("I8").Formula = "=IFERROR(IF(C7="""","""",INDEX(CustomerDB!F:F,MATCH(C7,CustomerDB!A:A,0))),"""")"
+                ws.Range("I6").Formula = "=IF(C7="""","""",IF(IFERROR(INDEX(CustomerDB!M:M,MATCH(C7,CustomerDB!A:A,0)),"""")="""",IFERROR(INDEX(CustomerDB!M:M,MATCH(TRIM(C7),CustomerDB!A:A,0)),""""),IFERROR(INDEX(CustomerDB!M:M,MATCH(C7,CustomerDB!A:A,0)),"""")))"
+                ws.Range("I7").Formula = "=IF(C7="""","""",IF(IFERROR(INDEX(CustomerDB!E:E,MATCH(C7,CustomerDB!A:A,0)),"""")="""",IFERROR(INDEX(CustomerDB!E:E,MATCH(TRIM(C7),CustomerDB!A:A,0)),""""),IFERROR(INDEX(CustomerDB!E:E,MATCH(C7,CustomerDB!A:A,0)),"""")))"
+                ws.Range("I8").Formula = "=IF(C7="""","""",IF(IFERROR(INDEX(CustomerDB!F:F,MATCH(C7,CustomerDB!A:A,0)),"""")="""",IFERROR(INDEX(CustomerDB!F:F,MATCH(TRIM(C7),CustomerDB!A:A,0)),""""),IFERROR(INDEX(CustomerDB!F:F,MATCH(C7,CustomerDB!A:A,0)),"""")))"
             End If
             ' Parse VSimple ID from URL for tracking
             ws.Range("I9").Formula = "=IFERROR(IF(C6<>"""",MID(C6,FIND(""*"",SUBSTITUTE(C6,""/"",""*"",LEN(C6)-LEN(SUBSTITUTE(C6,""/"",""""))))+1,100),""""),"""")"
             ' Model comes from PODB based on Truck PO number
-            ws.Range("I10").Formula = "=IFERROR(IF(C18="""","""",INDEX(PODB!D:D,MATCH(C18,PODB!I:I,0))),"""")"
+            ws.Range("I10").Formula = "=IF(C18="""","""",IF(IFERROR(INDEX(PODB!D:D,MATCH(C18,PODB!I:I,0)),"""")="""",IFERROR(INDEX(PODB!D:D,MATCH(TRIM(C18),PODB!I:I,0)),""""),IFERROR(INDEX(PODB!D:D,MATCH(C18,PODB!I:I,0)),"""")))"
             ' Quantity - NumberFormat wraps in parens for display
-            ws.Range("I11").Formula = "=IFERROR(IF(C18="""","""",COUNTIFS(PODB!I:I,C18,PODB!D:D,I10)),"""")"
+            ws.Range("I11").Formula = "=IF(C18="""","""",IF(IFERROR(COUNTIFS(PODB!I:I,C18,PODB!D:D,I10),0)=0,IFERROR(COUNTIFS(PODB!I:I,TRIM(C18),PODB!D:D,I10),""""),IFERROR(COUNTIFS(PODB!I:I,C18,PODB!D:D,I10),"""")))"
             ws.Range("I11").NumberFormat = """(""0"")"""
     End Select
 End Sub
