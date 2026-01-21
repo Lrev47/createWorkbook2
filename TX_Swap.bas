@@ -316,9 +316,11 @@ Public Sub MapToWorkbook(wb As Workbook)
 
     ' Customer Information
     destWs.Range("C4").Value = srcWs.Range("I7").Value    ' Customer # (from Info box)
+    destWs.Range("C11").Value = srcWs.Range("C10").Value  ' Sales Rep
     destWs.Range("C12").Value = srcWs.Range("C7").Value   ' On Site Contact
     destWs.Range("C13").Value = srcWs.Range("C8").Value   ' Phone
     destWs.Range("C14").Value = srcWs.Range("C9").Value   ' Email
+    destWs.Range("C15").Value = srcWs.Range("C11").Value  ' Customer Damage
 
     ' Embed V Simple link on header for easy access to deal
     Dim vSimpleUrl As String
@@ -329,7 +331,21 @@ Public Sub MapToWorkbook(wb As Workbook)
         Debug.Print "[TX_Swap] MapToWorkbook: V Simple hyperlink added to B2"
     End If
 
-    Debug.Print "[TX_Swap] MapToWorkbook: Complete - 5 fields mapped"
+    ' Map bulk data to Swap sheet
+    Dim swapWs As Worksheet
+    Set swapWs = wb.Worksheets("Swap")
+
+    Dim i As Long
+    For i = 13 To 313
+        If srcWs.Range("B" & i).Value <> "" Then
+            swapWs.Range("D" & i).Value = srcWs.Range("B" & i).Value   ' Returning Dealer ID
+            swapWs.Range("O" & i).Value = srcWs.Range("D" & i).Value   ' Replacement ID
+            swapWs.Range("J" & i).Value = srcWs.Range("E" & i).Value   ' Swap Date
+        End If
+    Next i
+
+    Debug.Print "[TX_Swap] MapToWorkbook: Bulk data mapped to Swap sheet"
+    Debug.Print "[TX_Swap] MapToWorkbook: Complete - 7 header fields + bulk data mapped"
 End Sub
 
 ' ============================================================================

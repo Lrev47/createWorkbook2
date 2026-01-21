@@ -574,10 +574,9 @@ Private Sub ProcessTransaction(orderType As String, templateName As String, file
         Case "New Usage"
             city = PathHelper.SafeCellValue(ws.Range("I7"))
             customerNumber = PathHelper.SafeCellValue(ws.Range("C7"))
-        Case Else
-            ' Return/Swap derive these from serial/dealer ID lookups
-            city = ""
-            customerNumber = ""
+        Case "Return", "Swap"
+            city = PathHelper.SafeCellValue(ws.Range("I8"))
+            customerNumber = PathHelper.SafeCellValue(ws.Range("I7"))
     End Select
 
     ' Build nested folder structure: Year/Customer/Location/OrderType/
