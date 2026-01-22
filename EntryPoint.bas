@@ -530,32 +530,52 @@ Public Sub OnSubmit()
 End Sub
 
 Public Sub OnClear()
-    ' Reset form to blank state - lets user start fresh without running RESET
+    ' Reset form to blank state - behaves like re-selecting the current order type
     Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets("Sheet1")
+    Dim orderType As String
 
-    Debug.Print "[EntryPoint] Clear button clicked"
+    Set ws = ThisWorkbook.Worksheets("Sheet1")
+    orderType = ws.Range("C4").Value
+
+    Debug.Print "[EntryPoint] Clear button clicked, orderType=" & orderType
 
     Application.ScreenUpdating = False
     Application.EnableEvents = False
 
     On Error Resume Next
 
-    ' Wipe customer info - covers all transaction types
-    ws.Range("C6:F10").ClearContents
-
-    ' Clear bulk data entry area (Return/Swap can have 300 rows of serials)
-    ws.Range("B12:F311").ClearContents
-
     ' Clear the markdown link from previous export
     ws.Range("I16").ClearContents
 
     On Error GoTo 0
 
+    ' If an order type is selected, reset the form like re-selecting it
+    If orderType <> "" Then
+        ' Clear and rebuild form area (same as Dispatcher does)
+        Dispatcher.ClearFormArea
+
+        ' Rebuild the form for current order type
+        Select Case orderType
+            Case "New Usage"
+                TX_NewUsage.Build
+            Case "Return"
+                TX_Return.Build
+            Case "Swap"
+                TX_Swap.Build
+        End Select
+
+        ' Rebuild info box with current order type
+        BuildInfoBox orderType
+    Else
+        ' No order type selected - just clear data areas
+        ws.Range("C6:F10").ClearContents
+        ws.Range("B12:F311").ClearContents
+    End If
+
     Application.EnableEvents = True
     Application.ScreenUpdating = True
 
-    Debug.Print "[EntryPoint] Form cleared"
+    Debug.Print "[EntryPoint] Form cleared and rebuilt for " & orderType
 End Sub
 
 Private Sub ProcessTransaction(orderType As String, templateName As String, fileName As String, customerName As String)
