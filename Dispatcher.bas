@@ -44,8 +44,13 @@ Public Sub HandleOrderTypeChange(ByVal orderType As String)
     Debug.Print "[Dispatcher] Loaded form for " & orderType
 End Sub
 
-Private Sub ClearFormArea(ws As Worksheet)
+Public Sub ClearFormArea(Optional ws As Worksheet = Nothing)
     ' Wipe form completely before building new layout
+
+    ' Get Sheet1 if not provided
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets("Sheet1")
+    End If
 
     ' Full range: header row + form fields + 300-row bulk entry area
     With ws.Range("B5:F311")
