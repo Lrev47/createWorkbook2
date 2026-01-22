@@ -142,6 +142,9 @@ Public Sub Build()
         .ShowError = True
     End With
 
+    ' UC# auto-fills from CRDB based on Returning Dealer ID
+    ws.Range("C13:C312").Formula = "=IF(B13="""","""",IF(IFERROR(INDEX(CRDB!I:I,MATCH(B13,CRDB!W:W,0)),"""")="""",IFERROR(INDEX(CRDB!I:I,MATCH(TRIM(B13),CRDB!W:W,0)),""""),IFERROR(INDEX(CRDB!I:I,MATCH(B13,CRDB!W:W,0)),"""")))"
+
     ' =========================================================================
     ' CONDITIONAL FORMATTING - Zebra stripes reveal rows as data is entered
     ' =========================================================================
